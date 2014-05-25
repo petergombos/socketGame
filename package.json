@@ -1,0 +1,16 @@
+{
+  "name": "NodeFun-SocketIO",
+  "description": "Just a test",
+  "version": "0.1.0",
+  "dependencies": {
+    "socket.io": "^0.9.17",
+    "lodash": "^2.4.1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-open": "^0.2.3",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-express": "^1.3.5",
+    "matchdep": "^0.3.0"
+  }
+}

@@ -1,0 +1,115 @@
+<html>
+<head>
+	<title>Socket</title>
+</head>
+<body>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/lodash/dist/lodash.min.js"></script>
+<script src="bower_components/socket.io-client/dist/socket.io.min.js"></script>
+
+<h1>Socket</h1>
+
+<section class="field"></section>
+
+<style type="text/css">
+	.field{
+		width: 100%;
+		height: 400px;
+		background: grey;
+		position: relative;
+	}
+
+	.player{
+		width: 10px;
+		height: 10px;
+		background: red;
+		position: absolute;
+	}
+
+	.me{
+		background: blue !important;
+	}
+</style>
+
+<script>
+	var app = {
+		user : {
+			id : null,
+			x : 0,
+			y : 0
+		},
+		init : function(){
+			var self = this;
+
+			// Setup Socket
+			this.socket = io.connect('http://192.168.0.144:9001');
+			
+			// get or set user ID
+			if(!window.localStorage.getItem('uid')){
+				window.localStorage.setItem('uid', new Date().getTime());
+			}
+			this.user.id = window.localStorage.getItem('uid');
+
+			// get users
+			this.socket.on('connected', function(users){
+				users = _.toArray(users);
+				for(var i=0; i<users.length; i++){
+					self.addPayer(users[i]);
+				}
+			});
+
+			// Send join event to server
+			this.socket.emit('join', this.user);
+
+			// render players
+			this.socket.on('move', function (users) {
+				self.render(_.toArray(users));
+			});
+
+			// add new user to dom
+			this.socket.on('newUser', function (user) {
+				self.addPayer(user);
+			});
+			
+			// move current users square as they move mouse
+			$('.field').bind('mousemove', function(e){
+
+				// set current coordinates
+				self.user.y = e.pageY - $('.field').offset().top;
+				self.user.x = e.pageX - $('.field').offset().left;
+
+				$('.me').css({ 
+					top : self.user.y,
+					left : self.user.x
+				});
+
+				// send move event
+				self.socket.emit('move',self.user);
+			});
+
+			// add our square to DOM
+			$('.field').append("<div class='player me'>");
+		},
+		render : function(users){
+			for(var i=0; i<users.length;i++){
+				$('#uid' + users[i].id).css({
+					top : users[i].y,
+					left : users[i].x
+				});
+			}
+
+		},
+		addPayer : function(data){
+			// add user if not self
+			if(data.id !== this.user.id){
+				$('.field').append("<div id='uid"+data.id+"' class='player'>");
+			}
+		}
+	}
+
+	$(document).ready(function(){
+		app.init();
+	});
+</script>
+</body>
+</html>

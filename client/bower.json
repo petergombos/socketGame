@@ -1,0 +1,22 @@
+{
+  "name": "socketGame",
+  "version": "0.1.0",
+  "homepage": "https://github.com/petergombos/socketGame",
+  "authors": [
+    "Pepe Gombos <peter@kriek.hu>"
+  ],
+  "main": "bower.json",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "lodash": "~2.4.1",
+    "socket.io-client": "~0.9.17"
+  }
+}
