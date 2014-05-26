@@ -1,4 +1,5 @@
-var io = require('socket.io').listen(process.env.PORT || 9001);
+var port = Number(process.env.PORT || 9001);
+var io = require('socket.io').listen(port);
 var _ = require('lodash');
 
 var users = {};
