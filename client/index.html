@@ -42,7 +42,8 @@
 			var self = this;
 
 			// Setup Socket
-			this.socket = io.connect('http://192.168.0.144:9001');
+			var server = (window.location.hostname!== "localhost") ? "tcp://socketgame.herokuapp.com:80" : "tcp://localhost:9001"
+			this.socket = io.connect(server);
 			
 			// get or set user ID
 			if(!window.localStorage.getItem('uid')){
