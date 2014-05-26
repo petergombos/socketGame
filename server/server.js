@@ -1,4 +1,4 @@
-var io = require('socket.io').listen(9001);
+var io = require('socket.io').listen(process.env.PORT || 9001);
 var _ = require('lodash');
 
 var users = {};
@@ -8,6 +8,8 @@ io.sockets.on('connection', function (socket) {
 	socket.emit('connected', users);
 
 	socket.on('join', function(data){
+		socket.broadcast.emit('newUser',data);
+		
 		var user = {};
 
 		if(users[data.id !== undefined]){
@@ -15,7 +17,6 @@ io.sockets.on('connection', function (socket) {
 
 			users = _.extend(users,user);
 
-			socket.broadcast.emit('newUser',data);
 		}
 	});
 
